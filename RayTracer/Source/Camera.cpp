@@ -5,33 +5,26 @@ void Camera::SetView(const glm::vec3& eye, const glm::vec3& target, const glm::v
 
 	// create camera axis
 	this->forward = glm::normalize(target - eye);
-	this->right = glm::normalize(glm::cross(forward, up));
-	this->up = glm::normalize(glm::cross(right, forward));
+	this->right = glm::normalize(glm::cross(glm::vec3(0, 1, 0), forward));
+	this->up = glm::cross(forward, right);
 
 	CalculateViewPlane();
 }
 
-Ray Camera::GetRay(const glm::vec2& uv) const {
-	Ray ray;
+void Camera::CalculateViewPlane() {
+    float theta = glm::radians(fov);
+    float halfHeight = glm::tan(theta / 2.0f);
+    float halfWidth = aspectRatio * halfHeight;
 
-	 
-	ray.origin = eye;	 
-	ray.direction = lowerLeft + horizontal * uv.x + vertical * uv.y - eye;
-
-	return ray;
+    horizontal = right * halfWidth * 2.0f;
+    vertical = up * halfHeight * 2.0f;
+    lowerLeft = eye + forward - right * halfWidth - up * halfHeight;
 }
 
-void Camera::CalculateViewPlane() {
-	
-	float theta = glm::radians(fov);
-	
-	float halfHeight = glm::tan(theta / 2);
-	
-	float halfWidth = halfHeight * aspectRatio;
-
-	
-	horizontal = right * halfWidth * 2.0f;
-	vertical = up * halfHeight * 2.0f;
-	lowerLeft = eye - halfWidth - halfHeight + forward;
+Ray Camera::GetRay(const glm::vec2& uv) const {
+    Ray ray;
+    ray.origin = eye;
+    ray.direction = glm::normalize(lowerLeft + horizontal * uv.x + vertical * uv.y - eye);
+    return ray;
 }
 
