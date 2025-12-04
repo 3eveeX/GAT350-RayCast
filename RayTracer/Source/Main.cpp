@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "Scene.h"
+#include "Sphere.h"
+#include "Random.h"
 
 int main() {
 	constexpr int SCREEN_WIDTH = 800;
@@ -21,6 +23,11 @@ int main() {
 	camera.SetView({ 0, 0, 5 }, { 0, 0, 0 });
 
 	Scene scene;
+	for (int i = 0; i < 5; i++) {
+		glm::vec3 position = random::getReal(glm::vec3{ -3.0f, -3.0f, -3.0f }, glm::vec3{ 3.0f, 3.0f, 3.0f });
+		auto sphere = std::make_unique<Sphere>(position, 1.0f, color3_t{ 1, 0, 0 });
+		scene.AddObject(std::move(sphere));
+	}
 
 	SDL_Event event;
 	bool quit = false;

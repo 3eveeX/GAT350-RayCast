@@ -2,6 +2,7 @@
 #include "Color.h"
 #include <vector>
 #include <memory>
+#include "Object.h"
 
 class Scene
 {
@@ -14,11 +15,15 @@ public:
 		this->skyTop = skyTop;
 	}
 
+	void AddObject(std::unique_ptr<Object> object);
+
 private:
 	// trace the ray into the scene
-	color3_t Trace(const struct Ray& ray);
+	color3_t Trace(const struct Ray& ray, float minDistance, float maxDistance);
 
 private:
 	color3_t skyBottom{ 1 };
 	color3_t skyTop{ 0.5f, 0.7f, 1.0f };
+
+	std::vector<std::unique_ptr<Object>> objects;
 };

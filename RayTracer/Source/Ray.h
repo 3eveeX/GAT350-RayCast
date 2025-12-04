@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "Color.h"
 
 struct Ray
 {
@@ -16,4 +17,12 @@ struct Ray
 	glm::vec3 operator * (float t) const {
 		return at(t);
 	}
+};
+
+struct rayCastHit {
+	glm::vec3 point;
+	glm::vec3 normal;
+	float distance;
+
+	color3_t color;
 };
