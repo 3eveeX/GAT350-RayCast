@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <memory>
 #include "Color.h"
 
 struct Ray
@@ -20,9 +21,9 @@ struct Ray
 };
 
 struct rayCastHit {
-	glm::vec3 point;
-	glm::vec3 normal;
-	float distance;
+	glm::vec3 point{ 0 };
+	glm::vec3 normal{ 0 };
+	float distance = 0;
 
-	color3_t color;
+	std::shared_ptr<class Material> material{ nullptr };
 };
