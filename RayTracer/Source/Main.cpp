@@ -29,11 +29,19 @@ int main() {
 	auto blue = std::make_shared<Lambertian>(color3_t{ 0.0f, 0.0f, 1.0f });
 	auto light = std::make_shared<Emissive>(color3_t{ 1.0f, 1.0f, 1.0f }, 3.0f);
 	auto metal = std::make_shared<Metal>(color3_t{ 1.0f, 1.0f, 1.0f }, 0.0f);
-	std::shared_ptr<Material> materials[] = {red, green, blue, light, metal};
+	auto glass = std::make_shared<Dielectric>(color3_t{ 1.0f, 1.0f, 1.0f}, 1.5f);
+	auto colouredGlassRed = std::make_shared<Dielectric>(color3_t{ random::getReal(0.0f, 1.0f), 0.0f, 0.0f }, 1.5f);
+	auto colouredGlassBlue = std::make_shared<Dielectric>(color3_t{ 0.0f, 0.0f, random::getReal(0.0f, 1.0f) }, 1.5f);
+	auto colouredGlassGreen = std::make_shared<Dielectric>(color3_t{ 0.0f, random::getReal(0.0f, 1.0f), 0.0f }, 1.5f);
+	auto colouredGlassGeneral = std::make_shared<Dielectric>(color3_t{ random::getReal(0.0f, 1.0f), random::getReal(0.0f, 1.0f), random::getReal(0.0f, 1.0f) }, 1.5f);
+	auto colouredGlassBlueGreen = std::make_shared<Dielectric>(color3_t{ 0.0f, random::getReal(0.0f, 1.0f), random::getReal(0.0f, 1.0f) }, 1.5f);
+	auto colouredGlassRedGreen = std::make_shared<Dielectric>(color3_t{ random::getReal(0.0f, 1.0f), random::getReal(0.0f, 1.0f), 0.0f }, 1.5f);
+	auto colouredGlassRedBlue = std::make_shared<Dielectric>(color3_t{ random::getReal(0.0f, 1.0f), 0.0f, random::getReal(0.0f, 1.0f) }, 1.5f);
+	std::shared_ptr<Material> materials[] = {red, green, blue, light, metal, glass, colouredGlassRed, colouredGlassGreen, colouredGlassBlue, colouredGlassGeneral, colouredGlassBlueGreen, colouredGlassRedGreen, colouredGlassRedBlue};
 
-	for (int i = 0; i < 15; i++) {
-		float radius = random::getReal(0.2f, 0.5f);
-		glm::vec3 position = random::getReal(glm::vec3{ -3.0f, radius, -3.0f }, glm::vec3{ 3.0f, radius, 3.0f });
+	for (int i = 0; i < 175; i++) {
+		float radius = random::getReal(0.1f, 0.3f);
+		glm::vec3 position = random::getReal(glm::vec3{ -10.0f, radius, -3.0f }, glm::vec3{ 10.0f, radius, 10.0f });
 
 		std::unique_ptr<Object> sphere = std::make_unique<Sphere>(Transform{ position }, radius, materials[random::getInt(0, sizeof(materials) / sizeof(materials[0]) - 1)]);
 		scene.AddObject(std::move(sphere));
@@ -61,7 +69,7 @@ int main() {
 		// draw to frame buffer
 		framebuffer.Clear({ 0, 0, 0, 255 });																					   
 		// draw scene to frame buffer using camera and number of samples
-		scene.Render(framebuffer, camera, 20);
+		scene.Render(framebuffer, camera, 100);
 
 		// update frame buffer, copy buffer pixels to texture
 		framebuffer.Update();

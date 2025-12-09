@@ -25,7 +25,7 @@ void Scene::Render(Framebuffer& framebuffer, const Camera& camera, int numSample
 				// get ray from camera
 				Ray ray = camera.GetRay(point);
 				// trace ray
-				color += Trace(ray, 0, 100, 20);
+				color += Trace(ray, 0.0001f, 100, 20);
 			}
 			// get average color = (color / number samples)
 			color /= static_cast<float>(numSamples);
@@ -42,7 +42,7 @@ void Scene::AddObject(std::unique_ptr<Object> object) {
 color3_t Scene::Trace(const Ray& ray, float minDistance, float maxDistance, int maxDepth) {
 	if (maxDepth == 0) return color3_t{ 0, 0, 0 };
 
-		bool rayHit = false;
+	bool rayHit = false;
 	float closestDistance = maxDistance;
 	rayCastHit raycastHit;
 
@@ -59,7 +59,7 @@ color3_t Scene::Trace(const Ray& ray, float minDistance, float maxDistance, int 
 	if (rayHit) {
 		color3_t attenuation;
 		Ray scattered;
-		// get raycast hit matereial, get material color and scattered ray 
+		// get raycast hit material, get material color and scattered ray
 		if (raycastHit.material->Scatter(ray, raycastHit, attenuation, scattered)) {
 			// trace scattered ray, final color will be the product of all the material colors
 			return attenuation * Trace(scattered, minDistance, maxDistance, maxDepth - 1);
