@@ -7,27 +7,32 @@
 using color3_t = glm::vec3;
 using color4_t = glm::vec4;
 
+inline float linearToGamma(float linear)
+{
+	return (linear > 0) ? std::sqrt(linear) : 0;
+}
+
 // convert from RGBA(0.0 - 1.0) color to (0 - 255) color
 inline SDL_Color ColorConvert(const color4_t& color4)
 {
 	SDL_Color color;
 
-	color.r = (uint8_t)(std::clamp(color4.r, 0.0f, 1.0f) * 255);
-	color.g = (uint8_t)(std::clamp(color4.g, 0.0f, 1.0f) * 255);
-	color.b = (uint8_t)(std::clamp(color4.b, 0.0f, 1.0f) * 255);
-	color.a = (uint8_t)(std::clamp(color4.a, 0.0f, 1.0f) * 255);
+	color.r = (uint8_t)(std::clamp(linearToGamma(color4.r), 0.0f, 1.0f) * 255);
+	color.g = (uint8_t)(std::clamp(linearToGamma(color4.g), 0.0f, 1.0f) * 255);
+	color.b = (uint8_t)(std::clamp(linearToGamma(color4.b), 0.0f, 1.0f) * 255);
+	color.a = (uint8_t)(std::clamp(linearToGamma(color4.a), 0.0f, 1.0f) * 255);
 
 	return color;
-}
+}																																						   
 
 // convert from RGB(0.0 - 1.0) color to (0 - 255) color
 inline SDL_Color ColorConvert(const color3_t& color3)
 {
 	SDL_Color color;
 
-	color.r = (uint8_t)(std::clamp(color3.r, 0.0f, 1.0f) * 255);
-	color.g = (uint8_t)(std::clamp(color3.g, 0.0f, 1.0f) * 255);
-	color.b = (uint8_t)(std::clamp(color3.b, 0.0f, 1.0f) * 255);
+	color.r = (uint8_t)(std::clamp(linearToGamma(color3.r), 0.0f, 1.0f) * 255);
+	color.g = (uint8_t)(std::clamp(linearToGamma(color3.g), 0.0f, 1.0f) * 255);
+	color.b = (uint8_t)(std::clamp(linearToGamma(color3.b), 0.0f, 1.0f) * 255);
 	color.a = 255;
 
 	return color;

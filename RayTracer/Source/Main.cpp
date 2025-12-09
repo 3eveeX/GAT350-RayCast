@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Sphere.h"
 #include "Random.h"
+#include "Plane.h"
 
 int main() {
 	constexpr int SCREEN_WIDTH = 800;
@@ -20,7 +21,7 @@ int main() {
 
 	float aspectRatio = framebuffer.width / static_cast<float>(framebuffer.height);
 		Camera camera(70.0f, aspectRatio);
-	camera.SetView({ 0, 0, 5 }, { 0, 0, 0 });
+	camera.SetView({ 0, 2, 5 }, { 0, 0, 0 });
 
 	Scene scene;
 	auto red = std::make_shared<Lambertian>(color3_t{ 1.0f, 0.0f, 0.0f });
@@ -31,11 +32,16 @@ int main() {
 	std::shared_ptr<Material> materials[] = {red, green, blue, light, metal};
 
 	for (int i = 0; i < 15; i++) {
-		glm::vec3 position = random::getReal(glm::vec3{ -3.0f }, glm::vec3{ 3.0f });
+		float radius = random::getReal(0.2f, 0.5f);
+		glm::vec3 position = random::getReal(glm::vec3{ -3.0f, radius, -3.0f }, glm::vec3{ 3.0f, radius, 3.0f });
 
-		std::unique_ptr<Object> sphere = std::make_unique<Sphere>(Transform{ position }, random::getReal(0.2f, 1.0f), materials[random::getInt(0, sizeof(materials) / sizeof(materials[0]) - 1)]);
+		std::unique_ptr<Object> sphere = std::make_unique<Sphere>(Transform{ position }, radius, materials[random::getInt(0, sizeof(materials) / sizeof(materials[0]) - 1)]);
 		scene.AddObject(std::move(sphere));
 	}
+
+	auto gray = std::make_shared<Lambertian>(color3_t{ 0.2f, 0.2f, 0.2f });
+	std::unique_ptr<Plane> plane = std::make_unique<Plane>(Transform{ glm::vec3{ 0.0f, 0.0f, 0.0f } }, gray);
+	scene.AddObject(std::move(plane));
 
 	SDL_Event event;
 	bool quit = false;
@@ -55,7 +61,7 @@ int main() {
 		// draw to frame buffer
 		framebuffer.Clear({ 0, 0, 0, 255 });																					   
 		// draw scene to frame buffer using camera and number of samples
-		scene.Render(framebuffer, camera, 1000);
+		scene.Render(framebuffer, camera, 20);
 
 		// update frame buffer, copy buffer pixels to texture
 		framebuffer.Update();
