@@ -1,12 +1,17 @@
 This Raycasting software can render 3d objects such as spheres on a plane in one of about 12 different materials.
 
 Metallic
+
 Emissive
-Lambertian
+
+Lambertian:
+
   -Red
   -Green
   -Blue
-Dielectric (glass)
+
+Dielectric (glass):
+
   -Red
   -Green
   -Blue
