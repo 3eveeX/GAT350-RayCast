@@ -50,15 +50,13 @@ Debug or Release build
 
 Add required include directories:
 
-SDL2 include path
+SDL3 include path
 
 GLM include path
 
-Link SDL2 libraries (if displaying rendered output):
+Link SDL3 libraries (if displaying rendered output):
 
-SDL2.lib
-
-SDL2main.lib
+SDL3.lib
 
 Build the project using Build → Build Solution.
 
